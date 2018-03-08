@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src",
-    "start": "npm run build && cross-env NODE_ENV=production node dist/index.js",
+    "start": "yarn start-dev",
+    "start-npm": "npm run build && cross-env NODE_ENV=production node dist/index.js",
     "start-dev": "cross-env NODE_ENV=development nodemon src/index.js --exec babel-node",
     "test": "cross-env NODE_ENV=test babel-node src/test.js",
     "build": "babel src --out-dir dist",
