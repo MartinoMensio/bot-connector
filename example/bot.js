@@ -12,7 +12,7 @@ const config = { url: 'http://localhost:8080', botId: 'yourBotId' }
 
   app.post('/', (req, res) => {
     const conversationId = req.body.message.conversation
-      const message = [{
+      const messages = [{
         type: 'text',
         content: 'my first message',
       }]

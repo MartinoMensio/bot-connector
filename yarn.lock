@@ -3609,9 +3609,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.3"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.3.tgz#3da382f670f25ded78d7b3d1792119bca0b7132d"
 
-"twit@git://github.com/dbousque/twit.git":
+"twit@https://github.com/dbousque/twit.git":
   version "2.2.5"
-  resolved "git://github.com/dbousque/twit.git#38c4ce541169f2b2bec7519ccfd81abf97d04095"
+  resolved "https://github.com/dbousque/twit.git#38c4ce541169f2b2bec7519ccfd81abf97d04095"
   dependencies:
     bluebird "^3.1.5"
     mime "^1.3.4"

@@ -80,7 +80,7 @@
     "superagent-promise": "^1.1.0",
     "tmp": "^0.0.31",
     "tsscmp": "^1.0.5",
-    "twit": "git://github.com/dbousque/twit.git",
+    "twit": "https://github.com/dbousque/twit.git",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
