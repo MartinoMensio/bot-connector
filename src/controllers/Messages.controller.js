@@ -174,11 +174,15 @@ export default class MessagesController {
       }
 
       await new Promise((resolve, reject) => {
-        MessagesController.bulkSaveMessages([conversation, messages, opts])
+        // I added the check also here!!!
+        MessagesController.bulkCheckMessages([conversation, messages, opts])
+          .then(MessagesController.bulkSaveMessages)
           .then(MessagesController.bulkFormatMessages)
           .then(MessagesController.bulkSendMessages)
           .then(resolve)
-          .catch(reject)
+          .catch((err) => {
+            console.log(err)
+          })
       })
     }
   }
@@ -224,7 +228,7 @@ export default class MessagesController {
 
   static async sendMessageToUserInChannel(req, res) {
     const { connector_id, channel_id, chat_id } = req.params
-    let message = req.body
+    let message = req.body.message
     // chatId, channelId, message
     let channel = await models.Channel.findById(channel_id).populate('children').populate('connector')
     const opts = invokeSync(channel.type, 'extractOptions', [req, res, channel])
@@ -233,14 +237,16 @@ export default class MessagesController {
     //console.log(channel)
     //console.log(opts)
     return global.controllers.Conversations.findOrCreateConversation(channel_id, chat_id)
-      .then(conversation => {
-        //console.log('conversation' + conversation)
+    .then(conversation => {
+        const participant = {_id: chat_id, senderId: chat_id, isBot: false,}
+        conversation.participants = [participant]
+        //console.log('conversation ' + conversation)
         const messages = [message]
-        const channelType = conversation.channel.type
+        //const channelType = conversation.channel.type
         //const formatted_msg = 
         //return invoke(channelType, 'sendMessage', [conversation, message, conversation])
         //return global.controllers.Webhooks.sendMessage([conversation, messages, options])
-        return global.controllers.Messages.postToConversation(conversation, messages)
+        return MessagesController.postToConversation(conversation, messages)
       })
       .then(() => {
         console.log("Done")

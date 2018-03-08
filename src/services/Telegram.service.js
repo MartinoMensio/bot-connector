@@ -135,14 +135,13 @@ export default class Telegram extends Template {
         })),
       }
     default:
-      throw new BadRequestError('Message type non-supported by Telegram')
+      throw new BadRequestError('Message type non-supported by Telegram: ' + type)
     }
   }
 
   static async sendMessage ({ channel }, { token, type, to, body, photo, keyboard }) {
     const url = `https://api.telegram.org/bot${token}`
     const method = type === 'text' ? 'sendMessage' : `send${_.capitalize(type)}`
-
     if (type === 'card') {
       if (!_.isUndefined(photo)) {
         await agent.post(`${url}/sendPhoto`, { chat_id: to, photo })
