@@ -1,3 +1,3 @@
-const env = process.env.NODE_ENV || 'development'
+const env = 'heroku'
 
 module.exports = require('./' + env + '.js')

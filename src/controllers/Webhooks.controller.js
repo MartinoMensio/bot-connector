@@ -3,6 +3,8 @@ import request from 'superagent'
 import { invoke, invokeSync } from '../utils'
 import { NotFoundError, BadRequestError } from '../utils/errors'
 
+import config from '../../config'
+
 export default class WebhooksController {
   /**
    * Receive a new message from a channel
@@ -51,16 +53,20 @@ export default class WebhooksController {
    * Send a message to a bot
    */
   static sendMessageToBot ([conversation, message, opts]) {
-    return new Promise((resolve, reject) => {
-      request.post(conversation.connector.url)
-        .set('Accept', 'application/json')
-        .set('Content-Type', 'application/json')
-        .send({ message, chatId: opts.chatId, senderId: opts.senderId })
-        .end((err, response) => {
-          if (err) { return reject(err) }
-          return resolve([conversation, response.body, opts])
-        })
-    })
+    if (config.websocket) {
+      console.log('I am alive to send to websocket: ' + message)
+    } else {
+      return new Promise((resolve, reject) => {
+        request.post(conversation.connector.url)
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          .send({ message, chatId: opts.chatId, senderId: opts.senderId })
+          .end((err, response) => {
+            if (err) { return reject(err) }
+            return resolve([conversation, response.body, opts])
+          })
+      })
+    }
   }
 
   /**

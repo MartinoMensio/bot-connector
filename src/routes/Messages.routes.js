@@ -110,4 +110,12 @@ export default [
     validators: [],
     handler: controllers.Messages.broadcastMessage,
   },
+
+
+  {
+    method: 'POST',
+    path: '/connectors/:connector_id/direct_message/:channel_id/:chat_id',
+    validators: [],
+    handler: controllers.Messages.sendMessageToUserInChannel,
+  }
 ]

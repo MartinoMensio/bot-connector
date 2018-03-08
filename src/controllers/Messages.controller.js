@@ -222,4 +222,34 @@ export default class MessagesController {
     return invoke(conversation.channel.type, 'updateConversationWithMessage', [conversation, message, options])
   }
 
+  static async sendMessageToUserInChannel(req, res) {
+    const { connector_id, channel_id, chat_id } = req.params
+    let message = req.body
+    // chatId, channelId, message
+    let channel = await models.Channel.findById(channel_id).populate('children').populate('connector')
+    const opts = invokeSync(channel.type, 'extractOptions', [req, res, channel])
+    //console.log(channel_id)
+    console.log(message)
+    //console.log(channel)
+    //console.log(opts)
+    return global.controllers.Conversations.findOrCreateConversation(channel_id, chat_id)
+      .then(conversation => {
+        //console.log('conversation' + conversation)
+        const messages = [message]
+        const channelType = conversation.channel.type
+        //const formatted_msg = 
+        //return invoke(channelType, 'sendMessage', [conversation, message, conversation])
+        //return global.controllers.Webhooks.sendMessage([conversation, messages, options])
+        return global.controllers.Messages.postToConversation(conversation, messages)
+      })
+      .then(() => {
+        console.log("Done")
+        res.status(200).send()
+        //renderCreated(res, { results: null, message: 'Messages successfully posted' })
+      }).catch(err=>  {
+      //
+        throw new BadRequestError('Error: ' + err)
+    })
+  }
+
 }
